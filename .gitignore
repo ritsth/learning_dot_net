@@ -1,0 +1,72 @@
+# Ignore build outputs
+bin/
+obj/
+
+# Ignore user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore Rider/JetBrains files
+.idea/
+*.DotSettings.user
+
+# Ignore Visual Studio specific files
+.vscode/
+.vs/
+*.csproj.user
+*.vcxproj.user
+*.pdb
+*.cache
+*.ilk
+*.log
+
+# Ignore .NET files
+*.swp
+*.swm
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Ignore environment files
+.env
+.env.local
+.env.*.local
+
+# Ignore Docker-specific files
+docker-compose.override.yml
+**/docker-entrypoint-initdb.d/
+**/Dockerfile.*
+**/.dockerignore
+
+# Ignore database files
+mysql_data/
+*.db
+
+# Ignore logs and temporary files
+logs/
+*.log
+*.tlog
+**/*.pid
+*.tmp
+temp/
+tmp/
+
+# Ignore test results
+TestResults/
+*.trx
+*.coverage
+coverage/
+
+# Ignore package manager files
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+desktop.ini
