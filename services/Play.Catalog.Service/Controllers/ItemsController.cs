@@ -19,6 +19,8 @@ namespace Play.Catalog.Service.Controllers
         // };
 
 
+        public static int requestCounter=0;
+
         //Dependency injection by creating an interface file 
         //make an constructor
         public readonly IItemsRepository itemsRepository;
@@ -27,10 +29,25 @@ namespace Play.Catalog.Service.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ItemDto>> GetAsync()
+        public async Task<ActionResult<IEnumerable<ItemDto>>> GetAsync()
         {
+            requestCounter++;
+            Console.WriteLine($"Request {requestCounter}: Starting");
+
+            if(requestCounter<= 2){
+                Console.WriteLine($"Request {requestCounter}: Delaying");
+                await Task.Delay(TimeSpan.FromSeconds(10));
+            }
+
+
+            if(requestCounter <=4){
+                Console.WriteLine($"Request {requestCounter}: 500 (Internal Server error)");
+                return StatusCode(500);
+
+            }
+
             var items = (await itemsRepository.GetAllAsync()).Select(item => item.AsDtos());
-            return items;
+            return Ok(items);
 
         }
 

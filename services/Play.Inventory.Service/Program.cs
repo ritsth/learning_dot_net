@@ -1,3 +1,4 @@
+using Amazon.Auth.AccessControlPolicy;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
@@ -13,14 +14,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Set the GuidRepresentationMode to V3 (Standard)
+//Conversion from guid while storing in the database
 BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V2;
 
+//Dependency injection (interface)
 builder.Services.AddScoped<IItemsRepository, ItemsRepository>();
 
+//Inter-services Communication using REST and HTTP
 builder.Services.AddHttpClient<CatalogClient>(client =>{
     client.BaseAddress= new Uri("http://localhost:5205");
 });
+// .AddPolicyHandler(Policy.TimeoutAsync<HttpRequestMessage>(1)); //one second timeout
 
 var app = builder.Build();
 
