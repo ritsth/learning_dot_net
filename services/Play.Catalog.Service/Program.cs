@@ -3,6 +3,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 
 using Play.Catalog.Service.Repositories;
+using Play.Catalog.Service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +20,16 @@ BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V2;
 
 builder.Services.AddScoped<IItemsRepository, ItemsRepository>();
 
+// Add gRPC services to the container
+builder.Services.AddGrpc();
+
 var app = builder.Build();
+
+// Map the gRPC service to handle incoming requests
+app.MapGrpcService<CatalogService>();
+app.MapGet("/", () => "gRPC Catalog service is running");
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

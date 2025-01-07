@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "Play.Catalog";
+
+service Catalog {
+    rpc GetProductDetails (ProductRequest) returns (ProductDetails);
+}
+
+message ProductRequest {
+    string productId = 1;
+}
+
+message ProductDetails {
+    string productId = 1;
+    string name = 2;
+    string description = 3;
+}

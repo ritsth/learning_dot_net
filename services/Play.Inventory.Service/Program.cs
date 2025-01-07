@@ -2,6 +2,7 @@ using Amazon.Auth.AccessControlPolicy;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
+using Play.Catalog;
 using Play.Inventory.Service.Clients;
 using Play.Inventory.Service.Repositories;
 
@@ -21,10 +22,20 @@ BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V2;
 builder.Services.AddScoped<IItemsRepository, ItemsRepository>();
 
 //Inter-services Communication using REST and HTTP
-builder.Services.AddHttpClient<CatalogClient>(client =>{
-    client.BaseAddress= new Uri("http://localhost:5205");
-});
+// builder.Services.AddHttpClient<CatalogClient>(client =>{
+//     client.BaseAddress= new Uri("http://localhost:5205");
+// });
 // .AddPolicyHandler(Policy.TimeoutAsync<HttpRequestMessage>(1)); //one second timeout
+
+// Add gRPC services to the container
+// builder.Services.AddGrpc();
+
+
+// Register gRPC client (Inter-services Communication)
+builder.Services.AddGrpcClient<Catalog.CatalogClient>(o =>
+{
+    o.Address = new Uri("https://localhost:5205"); // Address of the catalog service
+});
 
 var app = builder.Build();
 
