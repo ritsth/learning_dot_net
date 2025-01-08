@@ -14,20 +14,25 @@ namespace Play.Inventory.Service.Controllers
     public class ItemsController : ControllerBase
     {
 
-
         //Dependency injection by creating an interface file 
         //make an constructor
         public readonly IItemsRepository itemsRepository;
         private readonly CatalogClient catalogClient;
 
-        public ItemsController(IItemsRepository itemsRepository, CatalogClient catalogClient){
+        private readonly CatalogClientI catalogClientI;
+
+        public ItemsController(IItemsRepository itemsRepository, CatalogClient catalogClient,CatalogClientI catalogClientI){
             this.itemsRepository = itemsRepository;
-            this. catalogClient= catalogClient;
+            this.catalogClient= catalogClient;
+            this.catalogClientI = catalogClientI;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<InventoryItemDto>>> GetAsync(Guid userId)
         {
+            Console.WriteLine($"Product ID");
+            await catalogClientI.GetProductFromCatalog("2");
+
             // Check if the userId is empty and return a BadRequest if it is
             if (userId == Guid.Empty)
             {

@@ -25,6 +25,14 @@ builder.Services.AddGrpc();
 
 var app = builder.Build();
 
+// builder.WebHost.ConfigureKestrel(options =>
+// {
+//     options.ConfigureHttpsDefaults(httpsOptions =>
+//     {
+//         httpsOptions.SslProtocols = System.Security.Authentication.SslProtocols.Tls13 | System.Security.Authentication.SslProtocols.Tls12;
+//     });
+// });
+
 // Map the gRPC service to handle incoming requests
 app.MapGrpcService<CatalogService>();
 app.MapGet("/", () => "gRPC Catalog service is running");
