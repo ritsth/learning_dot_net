@@ -4,7 +4,13 @@ option csharp_namespace = "Play.Catalog";
 
 service Catalog {
     rpc GetProductDetails (ProductRequest) returns (ProductDetails);
+    rpc GetAllProductDetails (AllProductRequest) returns (stream ProductDetails); 
 }
+
+message AllProductRequest{
+
+}
+
 
 message ProductRequest {
     string productId = 1;

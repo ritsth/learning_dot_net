@@ -26,6 +26,21 @@ namespace Play.Catalog.Service.Services
                 Description = "A sample product for testing.",
             });
         }
+
+        public override async Task GetAllProductDetails(AllProductRequest request, IServerStreamWriter<ProductDetails> responseStream, ServerCallContext context)
+        {
+            //Stream all the products for the client
+            for (int i = 0; i < 10; i++)
+            {
+                await Task.Delay(1000);
+                await responseStream.WriteAsync(new ProductDetails
+                {
+                    ProductId = Guid.NewGuid().ToString(),
+                    Name = "Sample Product",
+                    Description = "A sample product for testing.",
+                });
+            };
+        }
     }
     
 }
