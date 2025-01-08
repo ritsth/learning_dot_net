@@ -5,6 +5,7 @@ using MongoDB.Bson.Serialization.Serializers;
 using Play.Catalog;
 using Play.Inventory.Service.Clients;
 using Play.Inventory.Service.Repositories;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,16 +29,15 @@ builder.Services.AddHttpClient<CatalogClient>(client =>{
 });
 // .AddPolicyHandler(Policy.TimeoutAsync<HttpRequestMessage>(1)); //one second timeout
 
-// Add gRPC services to the container
-// builder.Services.AddGrpc();
 
-builder.Services.AddScoped<CatalogClientI>();
+builder.Services.AddScoped<CatalogClientGrpc>();
 
-// Register gRPC client (Inter-services Communication)
+// // Register gRPC client (Inter-services Communication)
 builder.Services.AddGrpcClient<Catalog.CatalogClient>(o =>
 {
     o.Address = new Uri("https://localhost:5205"); // Address of the catalog service
 });
+
 
 var app = builder.Build();
 

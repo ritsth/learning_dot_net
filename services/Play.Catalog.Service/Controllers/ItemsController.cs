@@ -31,20 +31,20 @@ namespace Play.Catalog.Service.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ItemDto>>> GetAsync()
         {
-            requestCounter++;
-            Console.WriteLine($"Request {requestCounter}: Starting");
+            // requestCounter++;
+            // Console.WriteLine($"Request {requestCounter}: Starting");
 
-            if(requestCounter<= 2){
-                Console.WriteLine($"Request {requestCounter}: Delaying");
-                await Task.Delay(TimeSpan.FromSeconds(10));
-            }
+            // if(requestCounter<= 2){
+            //     Console.WriteLine($"Request {requestCounter}: Delaying");
+            //     await Task.Delay(TimeSpan.FromSeconds(10));
+            // }
 
 
-            if(requestCounter <=4){
-                Console.WriteLine($"Request {requestCounter}: 500 (Internal Server error)");
-                return StatusCode(500);
+            // if(requestCounter <=4){
+            //     Console.WriteLine($"Request {requestCounter}: 500 (Internal Server error)");
+            //     return StatusCode(500);
 
-            }
+            // }
 
             var items = (await itemsRepository.GetAllAsync()).Select(item => item.AsDtos());
             return Ok(items);
@@ -83,7 +83,8 @@ namespace Play.Catalog.Service.Controllers
             Console.WriteLine($"Item: {System.Text.Json.JsonSerializer.Serialize(item)}");
 
 
-            return CreatedAtAction(nameof(GetByIdAsync),new {id = item.Id}, item);
+            // return CreatedAtAction(nameof(GetByIdAsync),new {id = item.Id}, item);
+            return Ok();
         }
 
         [HttpPut("{id}")]

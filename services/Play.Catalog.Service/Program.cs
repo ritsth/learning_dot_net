@@ -4,9 +4,9 @@ using MongoDB.Bson.Serialization.Serializers;
 
 using Play.Catalog.Service.Repositories;
 using Play.Catalog.Service.Services;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 
 // Add services to the container.
@@ -15,23 +15,30 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 // Set the GuidRepresentationMode to V3 (Standard)
 BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V2;
 
 builder.Services.AddScoped<IItemsRepository, ItemsRepository>();
 
+
+//for Grpc Http2
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenLocalhost(5205, listenOptions =>
+    {
+        listenOptions.UseHttps();
+        listenOptions.Protocols = HttpProtocols.Http1AndHttp2;  // Enable both HTTP/1.1 and HTTP/2
+
+    });
+});
+
+
+
 // Add gRPC services to the container
 builder.Services.AddGrpc();
 
 var app = builder.Build();
-
-// builder.WebHost.ConfigureKestrel(options =>
-// {
-//     options.ConfigureHttpsDefaults(httpsOptions =>
-//     {
-//         httpsOptions.SslProtocols = System.Security.Authentication.SslProtocols.Tls13 | System.Security.Authentication.SslProtocols.Tls12;
-//     });
-// });
 
 // Map the gRPC service to handle incoming requests
 app.MapGrpcService<CatalogService>();

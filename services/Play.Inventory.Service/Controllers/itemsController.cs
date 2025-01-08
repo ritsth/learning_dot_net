@@ -19,19 +19,21 @@ namespace Play.Inventory.Service.Controllers
         public readonly IItemsRepository itemsRepository;
         private readonly CatalogClient catalogClient;
 
-        private readonly CatalogClientI catalogClientI;
+        private readonly CatalogClientGrpc catalogClientGrpc;
 
-        public ItemsController(IItemsRepository itemsRepository, CatalogClient catalogClient,CatalogClientI catalogClientI){
+        public ItemsController(IItemsRepository itemsRepository, CatalogClient catalogClient
+        ,CatalogClientGrpc catalogClientGrpc
+        ){
             this.itemsRepository = itemsRepository;
             this.catalogClient= catalogClient;
-            this.catalogClientI = catalogClientI;
+            this.catalogClientGrpc = catalogClientGrpc;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<InventoryItemDto>>> GetAsync(Guid userId)
         {
-            Console.WriteLine($"Product ID");
-            await catalogClientI.GetProductFromCatalog("2");
+            //testing Grpc
+            await catalogClientGrpc.GetProductFromCatalog("2");
 
             // Check if the userId is empty and return a BadRequest if it is
             if (userId == Guid.Empty)
@@ -44,7 +46,7 @@ namespace Play.Inventory.Service.Controllers
             var catalogItems= await catalogClient.GetCatalogItemsAsync();
             var inventoryItemsEntities = await itemsRepository.GetAllAsync(item => item.UserId == userId);
 
-            var items= inventoryItemsEntities.Select(async inventoryI => {
+            var items= inventoryItemsEntities.Select(inventoryI => {
                 var catalogI = catalogItems.Single(catalogItems => catalogItems.Id == inventoryI.CatalogItemId);
                 return inventoryI.AsDtos(catalogI.Name, catalogI.Description);
             });
@@ -83,7 +85,7 @@ namespace Play.Inventory.Service.Controllers
             }
 
             // Return OK response
-            return Ok();
+            return Ok(inventoryItem);
         }
 
 
