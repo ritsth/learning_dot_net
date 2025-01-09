@@ -13,6 +13,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="MassTransit" Version="8.3.4" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.4" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="9.0.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.19.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
@@ -21,6 +24,10 @@
   <ItemGroup>
   <Protobuf Include="Protos\service.proto" GrpcServices="Server" />
   </ItemGroup>
+<!-- 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Play.Catalog.Contracts\Play.Catalog.Contracts.csproj" />
+  </ItemGroup> -->
 
 
 </Project>

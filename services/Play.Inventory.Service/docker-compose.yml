@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  playinventoryservice:
+    build:
+      context: .  # Build the image from the Dockerfile in the current directory
+    image: playinventoryservice  # Name of the Docker image
+    container_name: playinventoryservice
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - MONGO_URI=mongodb://mongo:27018
+      # - RABBITMQ_URI=amqp://rabbitmq:5673
+    depends_on:
+      - mongo2
+      # - rabbitmq2
+    ports:
+      - "5002:80"  # Map port 5002 on the host to port 80 inside the container
+  
+  mongo2:
+    image: mongo
+    container_name: mongo2
+    ports:
+      - "27018:27017" # internal port (used in the project) mapped to external default port
+    volumes:
+      - mongodbdata:/data/db
+    restart: always
+
+  # rabbitmq2:
+  #   image: rabbitmq:management
+  #   container_name: rabbitmq2
+  #   ports:
+  #     - "5673:5672"
+  #     - "15673:15672"
+  #   volumes:
+  #     - rabbitmqdata:/var/lib/rabbitmq
+  #   hostname: rabbitmq
+
+volumes:
+  mongodbdata:
+  # rabbitmqdata:

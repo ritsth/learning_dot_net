@@ -3,20 +3,20 @@ using Play.Inventory.Service.Entities;
 
 namespace Play.Inventory.Service.Repositories
 {
-    public class ItemsRepository : IItemsRepository
+    public class CatalogItemsRepository : ICatalogItemsRepository
     {
-        private const string collectionName= "inventoryitems";
+        private const string collectionName= "catalogitems";
 
-        private readonly IMongoCollection<InventoryItem> dbCollection;
+        private readonly IMongoCollection<CatalogItem> dbCollection;
 
-        private readonly FilterDefinitionBuilder<InventoryItem> filterBuilder = Builders<InventoryItem>.Filter;
+        private readonly FilterDefinitionBuilder<CatalogItem> filterBuilder = Builders<CatalogItem>.Filter;
 
-        public ItemsRepository(){
-            var mongoClient = new MongoClient("mongodb://localhost:27018");
-            var database = mongoClient.GetDatabase("Inventory");
-            dbCollection= database.GetCollection<InventoryItem>(collectionName);
+        public CatalogItemsRepository(){
+            var mongoClient = new MongoClient("mongodb://localhost:27017");
+            var database = mongoClient.GetDatabase("CatalogComsumed");
+            dbCollection= database.GetCollection<CatalogItem>(collectionName);
         }
-        public async Task<IReadOnlyCollection<InventoryItem>> GetAllAsync(Func<InventoryItem, bool> predicate)
+        public async Task<IReadOnlyCollection<CatalogItem>> GetAllAsync(Func<CatalogItem, bool> predicate)
         {
             if (predicate == null)
             {
@@ -26,7 +26,7 @@ namespace Play.Inventory.Service.Repositories
             return (await dbCollection.Find(filterBuilder.Empty).ToListAsync()).Where(predicate).ToList();
         }
 
-        public async Task<InventoryItem> GetAsync(Func<InventoryItem, bool> predicate)
+        public async Task<CatalogItem> GetAsync(Func<CatalogItem, bool> predicate)
         {
             if (predicate == null)
             {
@@ -37,7 +37,7 @@ namespace Play.Inventory.Service.Repositories
         }
                
 
-        public async Task CreateAsync(InventoryItem entity)
+        public async Task CreateAsync(CatalogItem entity)
         {
             if (entity == null)
             {
@@ -47,20 +47,20 @@ namespace Play.Inventory.Service.Repositories
             await dbCollection.InsertOneAsync(entity);
         }
 
-        public async Task UpdateAsync(InventoryItem entity)
+        public async Task UpdateAsync(CatalogItem entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            FilterDefinition<InventoryItem> filter = filterBuilder.Eq(existingEntity => existingEntity.Id, entity.Id);
+            FilterDefinition<CatalogItem> filter = filterBuilder.Eq(existingEntity => existingEntity.Id, entity.Id);
             await dbCollection.ReplaceOneAsync(filter, entity);
         }
 
         public async Task RemoveAsync(Guid id)
         {
-            FilterDefinition<InventoryItem> filter = filterBuilder.Eq(entity => entity.Id, id);
+            FilterDefinition<CatalogItem> filter = filterBuilder.Eq(entity => entity.Id, id);
             await dbCollection.DeleteOneAsync(filter);
         }
 

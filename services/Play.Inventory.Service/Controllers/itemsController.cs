@@ -19,21 +19,21 @@ namespace Play.Inventory.Service.Controllers
         public readonly IItemsRepository itemsRepository;
         private readonly CatalogClient catalogClient;
 
-        private readonly CatalogClientGrpc catalogClientGrpc;
+        // private readonly CatalogClientGrpc catalogClientGrpc;
 
         public ItemsController(IItemsRepository itemsRepository, CatalogClient catalogClient
-        ,CatalogClientGrpc catalogClientGrpc
+        // ,CatalogClientGrpc catalogClientGrpc
         ){
             this.itemsRepository = itemsRepository;
             this.catalogClient= catalogClient;
-            this.catalogClientGrpc = catalogClientGrpc;
+            // this.catalogClientGrpc = catalogClientGrpc;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<InventoryItemDto>>> GetAsync(Guid userId)
         {
             //testing Grpc
-            await catalogClientGrpc.GetProductFromCatalog("2");
+            // await catalogClientGrpc.GetProductFromCatalog("2");
 
             // Check if the userId is empty and return a BadRequest if it is
             if (userId == Guid.Empty)

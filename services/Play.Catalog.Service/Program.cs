@@ -5,6 +5,10 @@ using MongoDB.Bson.Serialization.Serializers;
 using Play.Catalog.Service.Repositories;
 using Play.Catalog.Service.Services;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using MassTransit;
+using Play.Catalog.Service.Settings;
+using MassTransit.JobService;
+using Play.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,28 +25,51 @@ BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V2;
 
 builder.Services.AddScoped<IItemsRepository, ItemsRepository>();
 
-
-//for Grpc Http2
-builder.WebHost.ConfigureKestrel(options =>
+//MassTransit confif for RabbitMQ
+builder.Services.AddMassTransit(configure =>
 {
-    options.ListenLocalhost(5205, listenOptions =>
+    configure.UsingRabbitMq((context,configurator) =>
     {
-        listenOptions.UseHttps();
-        listenOptions.Protocols = HttpProtocols.Http1AndHttp2;  // Enable both HTTP/1.1 and HTTP/2
+        // var configuration = context.GetService<IConfiguration>();
+        // var serviceSettings = configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
+        // var rabbitMQSettings = builder.Configuration.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>();
+        // configurator.Host(rabbitMQSettings.HostName);
+
+        configurator.Host("rabbitmq://localhost", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+
+        configurator.ConfigureEndpoints(context);
+        //, new KebabCaseEndpointNameFormatter(serviceSettings.ServiceName, false));
 
     });
 });
 
+//Start the mass transit to publish the messages
+// builder.Services.AddMassTransitHostedService();
 
 
-// Add gRPC services to the container
-builder.Services.AddGrpc();
+// //for Grpc to use Http2
+// builder.WebHost.ConfigureKestrel(options =>
+// {
+//     options.ListenLocalhost(5205, listenOptions =>
+//     {
+//         listenOptions.UseHttps();
+//         listenOptions.Protocols = HttpProtocols.Http1AndHttp2;  // Enable both HTTP/1.1 and HTTP/2
+
+//     });
+// });
+
+// // Add gRPC services to the container
+// builder.Services.AddGrpc();
 
 var app = builder.Build();
 
-// Map the gRPC service to handle incoming requests
-app.MapGrpcService<CatalogService>();
-app.MapGet("/", () => "gRPC Catalog service is running");
+// // Map the gRPC service to handle incoming requests
+// app.MapGrpcService<CatalogService>();
+// app.MapGet("/", () => "gRPC Catalog service is running");
 
 
 
