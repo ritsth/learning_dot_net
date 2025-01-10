@@ -1,4 +1,4 @@
-namespace Play.Catalog.Service.Entities
+namespace Play.Inventory.Service.Entities
 {
     public class CatalogItem{
 

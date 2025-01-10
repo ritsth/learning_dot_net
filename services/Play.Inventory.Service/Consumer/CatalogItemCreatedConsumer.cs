@@ -1,5 +1,7 @@
 using MassTransit;
 using Play.Contracts;
+using Play.Inventory.Service.Entities;
+using Play.Inventory.Service.Repositories;
 
 namespace Play.Inventory.Service.Consumer
 {
@@ -7,17 +9,35 @@ namespace Play.Inventory.Service.Consumer
     public class CatalogItemCreatedConsumer : IConsumer<CatalogItemCreated>
     {
 
-        // public readonly IItemsRepository itemsRepository;
+        public readonly ICatalogItemsRepository catalogItemsRepository;
 
-        // public CatalogItemCreatedConsumer(IItemsRepository itemsRepository){
-        //     this.itemsRepository = itemsRepository;
-        // }
+        public CatalogItemCreatedConsumer(ICatalogItemsRepository catalogItemsRepository){
+            this.catalogItemsRepository= catalogItemsRepository;
+        }
 
-        public Task Consume(ConsumeContext<CatalogItemCreated> context)
+        public async Task Consume(ConsumeContext<CatalogItemCreated> context)
         {
             var message = context.Message;
             Console.WriteLine($"Item Created: {message.ItemId}, {message.Name}, {message.Description}");
-            return Task.CompletedTask;
+
+            //Add to Catalog database in the Inventory database
+            var item = await catalogItemsRepository.GetAsync(message.ItemId);
+
+            //already in the database
+            if(item != null){
+                return;  
+            }
+            
+            item = new CatalogItem
+            {
+                Id = message.ItemId,
+                Name = message.Name,
+                Description = message.Description
+            };
+
+            await catalogItemsRepository.CreateAsync(item);
+
+            return;
         }
     }    
 }

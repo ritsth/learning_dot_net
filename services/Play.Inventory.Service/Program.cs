@@ -24,9 +24,7 @@ BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V2;
 
 //Dependency injection (interface)
 builder.Services.AddScoped<IItemsRepository, ItemsRepository>();
-// builder.Services.AddScoped<ICatalogItemsRepository, CatalogItemsRepository>();
-// builder.Services.AddScoped<
-
+builder.Services.AddScoped<ICatalogItemsRepository, CatalogItemsRepository>();
 
 //Inter-services Communication using REST and HTTP1
 builder.Services.AddHttpClient<CatalogClient>(client =>{

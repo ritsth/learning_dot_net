@@ -12,30 +12,20 @@ namespace Play.Inventory.Service.Repositories
         private readonly FilterDefinitionBuilder<CatalogItem> filterBuilder = Builders<CatalogItem>.Filter;
 
         public CatalogItemsRepository(){
-            var mongoClient = new MongoClient("mongodb://localhost:27017");
+            var mongoClient = new MongoClient("mongodb://localhost:27018");
             var database = mongoClient.GetDatabase("CatalogComsumed");
             dbCollection= database.GetCollection<CatalogItem>(collectionName);
         }
-        public async Task<IReadOnlyCollection<CatalogItem>> GetAllAsync(Func<CatalogItem, bool> predicate)
+        public async Task<IReadOnlyCollection<CatalogItem>> GetAllAsync()
         {
-            if (predicate == null)
-            {
-                throw new ArgumentNullException(nameof(predicate));
-            }
-
-            return (await dbCollection.Find(filterBuilder.Empty).ToListAsync()).Where(predicate).ToList();
+            return await dbCollection.Find(filterBuilder.Empty).ToListAsync();
         }
 
-        public async Task<CatalogItem> GetAsync(Func<CatalogItem, bool> predicate)
+        public async Task<CatalogItem> GetAsync(Guid id)
         {
-            if (predicate == null)
-            {
-                throw new ArgumentNullException(nameof(predicate));
-            }
-
-            return (await dbCollection.Find(filterBuilder.Empty).ToListAsync()).FirstOrDefault(predicate);
+            FilterDefinition<CatalogItem> filter = filterBuilder.Eq(entity => entity.Id, id);
+            return await dbCollection.Find(filter).FirstOrDefaultAsync();
         }
-               
 
         public async Task CreateAsync(CatalogItem entity)
         {
@@ -68,4 +58,5 @@ namespace Play.Inventory.Service.Repositories
 
         
     }
+
 }
