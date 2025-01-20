@@ -20,7 +20,7 @@ WORKDIR /app
 COPY --from=build /out .
 
 # Expose the application's port
-EXPOSE 80
+EXPOSE 8080
 EXPOSE 443
 
 # Set the entry point

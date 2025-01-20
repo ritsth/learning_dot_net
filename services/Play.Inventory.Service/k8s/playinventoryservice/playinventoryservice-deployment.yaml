@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: playinventoryservice-deployment
+  labels:
+    app: playinventoryservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: playinventoryservice
+  template:
+    metadata:
+      labels:
+        app: playinventoryservice
+    spec:
+      containers:
+        - name: playinventoryservice
+          image: ritsth/playinventoryservice:latest
+          imagePullPolicy: Always  # Add this line
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: playinventoryservice-config
+            - secretRef:
+                name: playinventoryservice-secret
