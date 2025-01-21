@@ -12,7 +12,7 @@ namespace Play.Inventory.Service.Repositories
         private readonly FilterDefinitionBuilder<InventoryItem> filterBuilder = Builders<InventoryItem>.Filter;
 
         public ItemsRepository(){
-            var mongoClient = new MongoClient("mongodb://localhost:27018");
+            var mongoClient = new MongoClient("mongodb://localhost:27017");
             var database = mongoClient.GetDatabase("Inventory");
             dbCollection= database.GetCollection<InventoryItem>(collectionName);
         }

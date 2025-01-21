@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: playinventoryservice-ingress
+  # annotations:
+  #   nginx.ingress.kubernetes.io/rewrite-target: /  # Rewrite the URL path (if needed)
+spec:
+  rules:
+    - host: uno.com # Replace with your domain
+      http:
+        paths:
+          - path: /items # Route all traffic to the service
+            pathType: Prefix
+            backend:
+              service:
+                name: playinventoryservice-service # Name of your Kubernetes service
+                port:
+                  number: 8080 # Port exposed by the service
+  # tls:  # Optional: Configure TLS for HTTPS
+  # - hosts:
+  #   - play-inventory.example.com  # Replace with your domain
+  #   secretName: play-inventory-tls  # Name of the Kubernetes secret containing the TLS certificate

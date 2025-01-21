@@ -8,7 +8,7 @@ services:
     container_name: playinventoryservice
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - MONGO_URI=mongodb://mongo:27018
+      - MONGO_URI=mongodb://mongo:27017
       # - RABBITMQ_URI=amqp://rabbitmq:5673
     depends_on:
       - mongo2
@@ -20,7 +20,7 @@ services:
     image: mongo
     container_name: mongo2
     ports:
-      - "27018:27017" # internal port (used in the project) mapped to external default port
+      - "27017:27017" # internal port (used in the project) mapped to external default port
     volumes:
       - mongodbdata:/data/db
     restart: always

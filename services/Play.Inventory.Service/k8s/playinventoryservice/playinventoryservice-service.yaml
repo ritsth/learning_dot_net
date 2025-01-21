@@ -4,7 +4,10 @@ metadata:
   name: playinventoryservice-service
 spec:
   ports:
-    - port: 8080
+    - protocol: TCP
+      port: 8080
       targetPort: 8080
+      name: http
+      # nodePort: 30003 #for external access
   selector:
     app: playinventoryservice

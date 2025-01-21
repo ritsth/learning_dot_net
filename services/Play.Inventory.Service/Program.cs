@@ -47,39 +47,39 @@ builder.Services.AddHttpClient<CatalogClient>(client =>{
 // });
 
 
-//Configure RabbitMQ
-builder.Services.AddMassTransit(configure =>
-{        
-    // Register the consumer
-    configure.AddConsumer<CatalogItemCreatedConsumer>();
-    configure.AddConsumer<CatalogItemUpdatedConsumer>();
+// //Configure RabbitMQ
+// builder.Services.AddMassTransit(configure =>
+// {        
+//     // Register the consumer
+//     configure.AddConsumer<CatalogItemCreatedConsumer>();
+//     configure.AddConsumer<CatalogItemUpdatedConsumer>();
 
-    configure.UsingRabbitMq((context,configurator) =>
-    {
-        //not default so we need to configure it
-        // configurator.Host("rabbitmq", 5673, "/", h =>
-        // {
-        //     h.Username("guest");
-        //     h.Password("guest");
-        // });
-        configurator.Host("rabbitmq://localhost", h =>
-        {
-            h.Username("guest");
-            h.Password("guest");
-        });
+//     configure.UsingRabbitMq((context,configurator) =>
+//     {
+//         //not default so we need to configure it
+//         // configurator.Host("rabbitmq", 5673, "/", h =>
+//         // {
+//         //     h.Username("guest");
+//         //     h.Password("guest");
+//         // });
+//         configurator.Host("rabbitmq://localhost", h =>
+//         {
+//             h.Username("guest");
+//             h.Password("guest");
+//         });
 
-        // Configure consumer endpoints
-        configurator.ReceiveEndpoint("my-message-queue", e =>
-        {
-            e.ConfigureConsumer<CatalogItemCreatedConsumer>(context);
-            e.ConfigureConsumer<CatalogItemUpdatedConsumer>(context);
+//         // Configure consumer endpoints
+//         configurator.ReceiveEndpoint("my-message-queue", e =>
+//         {
+//             e.ConfigureConsumer<CatalogItemCreatedConsumer>(context);
+//             e.ConfigureConsumer<CatalogItemUpdatedConsumer>(context);
 
-        });
-    });
-});
+//         });
+//     });
+// });
 
-// Register MassTransit-related services
-builder.Services.AddMassTransitHostedService();
+// // Register MassTransit-related services
+// builder.Services.AddMassTransitHostedService();
 
 
 var app = builder.Build();

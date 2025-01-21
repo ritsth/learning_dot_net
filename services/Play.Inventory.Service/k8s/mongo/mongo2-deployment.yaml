@@ -18,4 +18,27 @@ spec:
         - name: mongo2
           image: mongo
           ports:
-            - containerPort: 27017
+            - containerPort: 27017  # MongoDB's internal port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo2-service
+spec:
+  selector:
+    app: mongo2
+  ports:
+    - protocol: TCP
+      port: 27017  # Exposed port (external port)
+      targetPort: 27017  # Internal MongoDB port inside the container (default port)
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo2-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi  # Adjust storage size as needed
