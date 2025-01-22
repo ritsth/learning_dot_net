@@ -81,6 +81,17 @@ builder.Services.AddHttpClient<CatalogClient>(client =>{
 // // Register MassTransit-related services
 // builder.Services.AddMassTransitHostedService();
 
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 
 var app = builder.Build();
 

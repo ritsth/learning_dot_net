@@ -14,6 +14,7 @@ namespace Play.Inventory.Service.Repositories
         public ItemsRepository(){
             var mongoClient = new MongoClient("mongodb://localhost:27017");
             var database = mongoClient.GetDatabase("Inventory");
+            Console.WriteLine($"database: {database}, mongoClient: {mongoClient}");
             dbCollection= database.GetCollection<InventoryItem>(collectionName);
         }
         public async Task<IReadOnlyCollection<InventoryItem>> GetAllAsync(Func<InventoryItem, bool> predicate)
@@ -39,6 +40,8 @@ namespace Play.Inventory.Service.Repositories
 
         public async Task CreateAsync(InventoryItem entity)
         {
+             Console.WriteLine($"problemm!!!!!!");
+
             if (entity == null)
             {
                 throw new ArgumentNullException(nameof(entity));

@@ -30,6 +30,13 @@ namespace Play.Inventory.Service.Controllers
         }
 
         [HttpGet]
+        public Task<ActionResult> GetAsync()
+        {
+            return Task.FromResult<ActionResult>(Ok());
+        }
+
+
+        [HttpGet("{id}")] 
         public async Task<ActionResult<IEnumerable<InventoryItemDto>>> GetAsync(Guid userId)
         {
             //testing Grpc
@@ -58,13 +65,10 @@ namespace Play.Inventory.Service.Controllers
         [HttpPost]
         public async Task<ActionResult> PostAsync(GrantItemsDto grantItemsDto)
         {
-            // Retrieve the inventory item based on UserId and CatalogItemId
-            var inventoryItem = await itemsRepository.GetAsync( item => (item.UserId == grantItemsDto.UserId) && (item.CatalogItemId == grantItemsDto.CatalogItemId));
+                // Log the incoming request
+            Console.WriteLine($"Received request: UserId={grantItemsDto.UserId}, CatalogItemId={grantItemsDto.CatalogItemId}, Quantity={grantItemsDto.Quantity}");
 
-            // If the inventory item does not exist, create a new one
-            if (inventoryItem == null)
-            {
-                inventoryItem = new InventoryItem
+                var inventoryItem = new InventoryItem
                 {
                     CatalogItemId = grantItemsDto.CatalogItemId,
                     UserId = grantItemsDto.UserId,
@@ -74,15 +78,31 @@ namespace Play.Inventory.Service.Controllers
 
                 // Create the new inventory item in MongoDB
                 await itemsRepository.CreateAsync(inventoryItem);
-            }
-            else
-            {
-                // If the inventory item exists, update the quantity
-                inventoryItem.Quantity += grantItemsDto.Quantity;
+            // // Retrieve the inventory item based on UserId and CatalogItemId
+            // // var inventoryItem = await itemsRepository.GetAsync( item => (item.UserId == grantItemsDto.UserId) && (item.CatalogItemId == grantItemsDto.CatalogItemId));
 
-                // Update the existing inventory item in MongoDB
-                await itemsRepository.UpdateAsync(inventoryItem);
-            }
+            // // If the inventory item does not exist, create a new one
+            // if (inventoryItem == null)
+            // {
+            //     inventoryItem = new InventoryItem
+            //     {
+            //         CatalogItemId = grantItemsDto.CatalogItemId,
+            //         UserId = grantItemsDto.UserId,
+            //         Quantity = grantItemsDto.Quantity,
+            //         AcquiredDate = DateTimeOffset.UtcNow
+            //     };
+
+            //     // Create the new inventory item in MongoDB
+            //     await itemsRepository.CreateAsync(inventoryItem);
+            // }
+            // else
+            // {
+            //     // If the inventory item exists, update the quantity
+            //     inventoryItem.Quantity += grantItemsDto.Quantity;
+
+            //     // Update the existing inventory item in MongoDB
+            //     await itemsRepository.UpdateAsync(inventoryItem);
+            // }
 
             // Return OK response
             return Ok(inventoryItem);

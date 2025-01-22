@@ -5,6 +5,7 @@ metadata:
   # annotations:
   #   nginx.ingress.kubernetes.io/rewrite-target: /  # Rewrite the URL path (if needed)
 spec:
+  ingressClassName: nginx  # Add this line
   rules:
     - host: uno.com # Replace with your domain
       http:
