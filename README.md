@@ -29,4 +29,27 @@ A hands-on project exploring **.NET**, **Docker**, **RabbitMQ**, and distributed
 
 ---
 
+## ⭐ Features
+
+- Microservice design with clear separation of concerns  
+- Event-driven communication through RabbitMQ  
+- Docker-ready deployment workflow  
+- Shared contract library to keep messages consistent  
+
+---
+
+## ▶️ Getting Started
+
+1. Clone the repository  
+   ```bash
+   git clone https://github.com/ritsth/learning_dot_net.git
+   ```
+2. Run the setup script
+   ```bash
+    ./apply.sh
+   ```
+3. Spin up Docker services
+   ```bash
+    docker-compose up --build
+   ```
 
